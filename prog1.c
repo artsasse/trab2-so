@@ -47,7 +47,7 @@ int main(void)
       printf("\nMensagem recebida pelo processo pai: %s", parent_buffer);
 
       // Aguarde mensagem do filho e mostre o texto recebido
-      if(read(child_buff[0], &parent_int_buffer, sizeof(parent_int_buffer)) == -1) exit(3);
+      if(read(child_buff[0], &parent_int_buffer, sizeof(int)) == -1) exit(3);
       printf("\nValor recebido pelo processo pai: %d", parent_int_buffer);
 
       // Aguarde o término do processo filho
@@ -73,7 +73,7 @@ int main(void)
       if(read(parent_buff[0], child_buffer, N) == -1) exit(3);
       child_buffer[N] = 0;
 
-      printf("\nMensagem recebida pelo processo filho: %s\n", child_message);
+      printf("\nMensagem recebida pelo processo filho: %s\n", child_buffer);
 
       // Envie uma mensagem resposta ao pai
       if(write(child_buff[1], child_message, strlen(child_message)) == -1) exit(3);
@@ -82,7 +82,7 @@ int main(void)
       for (j = 0; j <= 10000; j++);
 
       // Envie mensagem ao processo pai com o valor final de "j"
-      if(write(child_buff[1], &j, sizeof(j)) == -1) exit(3);
+      if(write(child_buff[1], &j, sizeof(int)) == -1) exit(3);
 
       // Execute o comando abaixo e responda às perguntas
       execl("/Bin/ls", "ls", NULL);
