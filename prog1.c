@@ -13,7 +13,7 @@ int main(void)
    //// Insira um comando para pegar o PID do processo corrente e mostre na
    //// tela da console.
    id = getpid();
-   printf("\nPID: %d", id);
+   printf("PID: %d\n", id);
 
    int parent_buff[2];
    int child_buff[2];
@@ -31,33 +31,39 @@ int main(void)
 
 
       // Mostre na console o PID do processo pai e do processo filho
-      printf("\nPID: %d - PID do Filho: %d", id, child_id);
+      printf("PID: %d - PID do Filho: %d\n", id, child_id);
       
       // Monte uma mensagem e a envie para o processo filho
       if(write(parent_buff[1], parent_message, strlen(parent_message)) == -1) exit(3);
    
       // Mostre na tela o texto da mensagem enviada 
-      printf("\nMensagem enviada ao filho: %s", parent_message);
+      printf("Mensagem enviada ao filho: %s\n", parent_message);
 
       // Aguarde a resposta do processo filho
       if(read(child_buff[0], parent_buffer, N) == -1) exit(3);
       parent_buffer[N] = 0;
 
       // Mostre na tela o texto recebido do processo filho
-      printf("\nMensagem recebida pelo processo pai: %s", parent_buffer);
+      printf("Mensagem recebida pelo processo pai: %s\n", parent_buffer);
+
+
+      // Envia o aviso de lido
+      if(write(parent_buff[1], "ping", strlen("ping")) == -1) exit(3);
 
       // Aguarde mensagem do filho e mostre o texto recebido
       if(read(child_buff[0], &parent_int_buffer, sizeof(int)) == -1) exit(3);
-      printf("\nValor recebido pelo processo pai: %d", parent_int_buffer);
+      printf("Valor recebido pelo processo pai: %d\n", parent_int_buffer);
 
       // Aguarde o término do processo filho
       wait(&status);
 
+      close(parent_buff[0]);
+      close(parent_buff[1]);
+
       // Informe na tela que o filho terminou e que o processo pai também
-      printf("\nProcesso filho terminou e o pai também");
-
-
+      printf("Processo filho terminou e o pai também\n");
       // vai encerrar
+
    } else {
       // Faça com que o processo filho execute este trecho de código
       char *child_message = "Hello, parent!";
@@ -67,22 +73,28 @@ int main(void)
       int parent_id = getppid();
 
       // Mostre na tela o PID do processo corrente e do processo pai
-      printf("\nPID: %d - PID do Pai: %d", id, parent_id);
+      printf("PID: %d - PID do Pai: %d\n", id, parent_id);
 
       // Aguarde a mensagem do processo pai e ao receber mostre o texto na tela
       if(read(parent_buff[0], child_buffer, N) == -1) exit(3);
       child_buffer[N] = 0;
 
-      printf("\nMensagem recebida pelo processo filho: %s\n", child_buffer);
+      printf("Mensagem recebida pelo processo filho: %s\n", child_buffer);
 
       // Envie uma mensagem resposta ao pai
       if(write(child_buff[1], child_message, strlen(child_message)) == -1) exit(3);
+
+      // Aguardando o aviso de que o pai leu a última mensagem
+      if(read(parent_buff[0], child_buffer, N) == -1) exit(3);
 
       // Execute o comando "for" abaixo
       for (j = 0; j <= 10000; j++);
 
       // Envie mensagem ao processo pai com o valor final de "j"
       if(write(child_buff[1], &j, sizeof(int)) == -1) exit(3);
+
+      close(child_buff[0]);
+      close(child_buff[1]);
 
       // Execute o comando abaixo e responda às perguntas
       execl("/Bin/ls", "ls", NULL);
