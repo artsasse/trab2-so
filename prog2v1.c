@@ -12,10 +12,14 @@ int main(void) {
     char command[TAM];
 
     // Enquanto não é passado "exit"
-    while (strcmp(command, "exit") != 0) {
+    while (1) {
 
         // Lê um comando da entrada
         scanf("%s", command);
+
+        // Se for lido um exit, termina o programa
+        if (strcmp(command, "exit") == 0)
+            return 0;
 
         // Executa um fork para criar um novo processo
         int ret = fork();
@@ -49,5 +53,5 @@ int main(void) {
                 printf("Código de retorno = %d\n", ret_code);
         }
     }
-    exit(0);
+    return 0;
 }
