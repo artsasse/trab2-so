@@ -97,17 +97,15 @@ int main(void)
       close(child_buff[1]);
 
       // Execute o comando abaixo e responda às perguntas
-      execl("/Bin/ls", "ls", NULL);
+      execl("/bin/ls", "ls", NULL);
       // O que acontece após este comando?
          /* 
-            O programa tenta substituir o programa original do processo filho pelo programa do comando “ls”.
-            Como a pasta "/Bin" não existe, essa tentativa gera um erro que faz
-            o processo seguir com a execução do programa original.
+            Respondido no relatório.
          */
 
       // O que pode acontecer se o comando "execl" falhar?
          /*  
-            O Processo segue com a execução do programa original. 
+            Respondido no relatório.
          */
    }
    exit(0);
