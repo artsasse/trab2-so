@@ -97,7 +97,8 @@ int main(void)
       close(child_buff[1]);
 
       // Execute o comando abaixo e responda às perguntas
-      execl("/bin/ls", "ls", NULL);
+      // Também testamos com a linha: execl("/bin/ls", "ls", NULL);
+      execl("/Bin/ls", "ls", NULL);
       // O que acontece após este comando?
          /* 
             Respondido no relatório.
